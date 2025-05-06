@@ -96,11 +96,11 @@ yarn build
 ## Компоненты представления
 #### Класс ItemCard —
 Поля:
-+ title: HTMLElement — элемент заголовка
-+ description: HTMLElement — элемент описания
-+ price: HTMLElement — элемент цены
-+ category: HTMLElement — элемент категории
-+ image: HTMLElement — элемент изображения
++ title: HTMLElement — элемент заголовка
++ description: HTMLElement — элемент описания
++ price: HTMLElement — элемент цены
++ category: HTMLElement — элемент категории
++ image: HTMLElement — элемент изображения
 
 Методы:
 + set title(title: string) — задать значение элемента заголовка
@@ -115,7 +115,7 @@ yarn build
 
 #### Класс Basket —
 Поля:
-+ items: HTMLElement — массив элементов товаров в корзине
++ items: HTMLElement — массив элементов товаров в корзине
 + total: HTMLElement — стоимость всех товаров в корзине
 + button: HTMLElement — кнопка отправки формы
   
@@ -128,8 +128,8 @@ yarn build
 
 #### Класс Page —
 Поля:
-+ catalog: HTMLElement  — массив элементов товаров
-+ basket: HTMLElement  — количество товаров в корзине
++ catalog: HTMLElement  — массив элементов товаров
++ basket: HTMLElement  — количество товаров в корзине
 
 Методы:
 + set counter(value: number) — задать значение элемента количества товаров в корзине
@@ -140,8 +140,8 @@ yarn build
 
 #### Класс OrderPayment —
 Поля:
-+ payment: HTMLElement — выбор способа оплаты
-+ address: HTMLElement — адрес покупателя
++ payment: HTMLElement — выбор способа оплаты
++ address: HTMLElement — адрес покупателя
 
 Методы:
 + set payment(value: Payment) — задать значение элемента оплаты
@@ -152,8 +152,8 @@ yarn build
 
 #### Класс OrderContact —
 Поля:
-+ phone: HTMLElement — телефон покупателя
-+ email: HTMLElement — почта покупателя
++ phone: HTMLElement — телефон покупателя
++ email: HTMLElement — почта покупателя
 
 Методы:
 + set phone(value: string) — задать значение элемента телефон
