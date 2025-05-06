@@ -64,6 +64,7 @@ yarn build
 #### Класс Item
 Поля:
 + catalog: Item[] — массив каталога товаров
+  
 Методы:
 + setItems(items: IItem[]) — создание каталога товаров
 + addItem(item: IItem) — добавление товара в каталог
@@ -72,6 +73,7 @@ yarn build
 #### Класс Basket
 Поля:
 + items: Item[] — массив товаров добавленных в корзину
+  
 Методы:
 + addItemToBacket(item: IItem) — добавление товара в корзину
 + removeItemFromBucket(string: id) — удаление товара из корзины
@@ -84,6 +86,7 @@ yarn build
 + phone: string — телефон покупателя
 + email: string — эмейл покупателя
 + payment: Payment — способ оплаты
+  
 Методы:
 + setAddress(address: string) — сохранить адрес
 + setPhone(phone: string) — сохранить телефон
@@ -98,6 +101,7 @@ yarn build
 + price: HTMLElement — элемент цены
 + category: HTMLElement — элемент категории
 + image: HTMLElement — элемент изображения
+
 Методы:
 + set title(title: string) — задать значение элемента заголовка
 + get title(): string — получить заголовок товара из модели
@@ -114,6 +118,7 @@ yarn build
 + items: HTMLElement — массив элементов товаров в корзине
 + total: HTMLElement — стоимость всех товаров в корзине
 + button: HTMLElement — кнопка отправки формы
+  
 Методы:
 + set items(items: HTMLElement[]) — задать значение списка элементов товаров в корзине
 + get items(items: IItem) — получить список товара из модели корзины
@@ -125,6 +130,7 @@ yarn build
 Поля:
 + catalog: HTMLElement  — массив элементов товаров
 + basket: HTMLElement  — количество товаров в корзине
+
 Методы:
 + set counter(value: number) — задать значение элемента количества товаров в корзине
 + get counter(): number — получить количество товаров в корзине из модели
@@ -136,6 +142,7 @@ yarn build
 Поля:
 + payment: HTMLElement — выбор способа оплаты
 + address: HTMLElement — адрес покупателя
+
 Методы:
 + set payment(value: Payment) — задать значение элемента оплаты
 + get payment(): Payment — получить способ оплаты из модели
@@ -147,6 +154,7 @@ yarn build
 Поля:
 + phone: HTMLElement — телефон покупателя
 + email: HTMLElement — почта покупателя
+
 Методы:
 + set phone(value: string) — задать значение элемента телефон
 + get phone(): string — получить телефон из модели
@@ -174,6 +182,7 @@ yarn build
 Поля:
 + closeButton: HTMLButtonElement — кнопка закрытия формы
 + content: HTMLElement— контент формы
+
 Методы:
 + open() — открыть модалку
 + close() — закрыть модалку
