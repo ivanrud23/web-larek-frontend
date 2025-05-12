@@ -1,44 +1,31 @@
-import { IItem } from "../types";
-import { ensureElement } from "../utils/utils";
-import { Component } from "./base/Component";
-import { EventEmitter } from "./base/events";
 
-interface ICardActions {
-  onClick: (event: MouseEvent) => void;
+import { ensureElement } from '../utils/utils';
+import { EventEmitter } from './base/events';
+import { ItemUI } from './ItemUI';
+
+interface IItemUIBasket {
+	index: number;
 }
 
-export class ItemUIBasket extends Component<IItem> {
+export class ItemUIBasket extends ItemUI<IItemUIBasket> {
+	protected elementButton: HTMLButtonElement;
+	protected elementIndex: HTMLElement;
 
-  protected itemTitle: HTMLElement;
-  protected itemPrice: HTMLElement;
-  protected basketButton?: HTMLElement;
+	constructor(container: HTMLElement, protected events: EventEmitter) {
+		super(container, events);
 
-  constructor(container: HTMLElement, protected events: EventEmitter) {
-    super(container);
-    this.itemTitle = ensureElement('.card__title', this.container);
-    this.itemPrice = ensureElement('.card__price', this.container);
-    // this.basketButton = ensureElement('.card__button', this.container) as HTMLButtonElement;
+		this.elementButton = ensureElement(
+			'.card__button',
+			this.container
+		) as HTMLButtonElement;
+		this.elementIndex = ensureElement('.basket__item-index', this.container);
 
-  //   if (actions?.onClick) {
-  //     if (this.basketButton) {
-  //         this.basketButton.addEventListener('click', actions.onClick);
-  //     } else {
-  //         container.addEventListener('click', actions.onClick);
-  //     }
-  // }
-  }
+		this.elementButton.addEventListener('click', () => {
+			this.events.emit('basket:changed', { id: this.cardId });
+		});
+	}
 
-  set title(value: string) {
-    this.setText(this.itemTitle, value);
-  }
-
-  set price(value: number) {
-    this.setText(this.itemPrice, value);
-  }
-
-render(data: Partial<ItemUIBasket>): HTMLElement {
-  Object.assign(this as Object, data);
-  return this.container;
-}
-
+	set index(value: number) {
+		this.setText(this.elementIndex, value);
+	}
 }

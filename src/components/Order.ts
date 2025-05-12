@@ -1,31 +1,46 @@
-import { Payment } from "../types";
+import { FormErrors, IOrder, Payment } from '../types';
+import { IEvents } from './base/events';
+import { Model } from './base/Model';
 
-export class Order {
-  protected address: string;
-  protected phone: string;
-  protected email: string;
-  protected payment: Payment;
+export class Order extends Model<IOrder> {
+	protected order: IOrder;
+	protected formErrors: FormErrors;
 
-  constructor() {
-      this.address = '';
-      this.phone = '';
-      this.email = '';
-      this.payment = 'онлайн';
-    };
+	constructor(protected events: IEvents) {
+		super({}, events);
+		this.order = {
+			address: '',
+			phone: '',
+			email: '',
+			// payment: 'онлайн',
+			// items: []
+		};
+		this.formErrors = {};
+	}
 
-  setAddress(address: string) {
-    this.address = address;
-  }
+	setOrderField<T extends keyof IOrder>(field: T, value: IOrder[T]) {
+		this.order[field] = value;
+		// this.emitChanges('order:changed', { field });
+		this.validateOrder();
+	}
 
-  setPhone(phone: string) {
-    this.phone = phone;
-  }
+	validateOrder() {
+		const errors: typeof this.formErrors = {};
+		if (!this.order.email) {
+			errors.email = 'Необходимо указать email';
+		}
+		if (!this.order.phone) {
+			errors.phone = 'Необходимо указать телефон';
+		}
+		if (!this.order.address) {
+			errors.address = 'Необходимо указать адрес';
+		}
+		// if (!this.order.payment) {
+		//   errors.payment = 'Необходимо выбрать способ оплаты';
+		// }
+		this.formErrors = errors;
+		this.events.emit('formErrors:change', this.formErrors);
 
-  setEmail(email: string) {
-    this.email = email;
-  }
-
-  setPayment(payment: Payment) {
-    this.payment = payment;
-  }
+		return Object.keys(errors).length === 0;
+	}
 }

@@ -1,38 +1,35 @@
-import {ItemUIBasket} from "./ItemUIBasket";
-import { ensureElement } from "../utils/utils";
-import { Category, IItem } from "../types";
-import { EventEmitter } from "./base/events";
+import { ItemUI } from './ItemUI';
+import { ensureElement } from '../utils/utils';
+import { Category, IItem } from '../types';
+import { EventEmitter } from './base/events';
 
-export class ItemUICatalog extends ItemUIBasket {
-  protected item?: IItem;
+interface IItemUICatalog {
+	image: string;
+}
 
-  protected elementCategory: HTMLElement;
-  protected elementImage: HTMLImageElement;
-  protected elementButton: HTMLButtonElement;
-  protected elementItem?: HTMLElement;
+export class ItemUICatalog<IItemUICatalog> extends ItemUI<IItemUICatalog> {
+	protected elementCategory: HTMLElement;
+	protected elementImage: HTMLImageElement;
 
-  constructor(container: HTMLElement, protected events: EventEmitter) {
-    super(container, events);
+	constructor(container: HTMLElement, protected events: EventEmitter) {
+		super(container, events);
 
-    this.elementCategory = ensureElement('.card__category', this.container);
-    this.elementImage = ensureElement<HTMLImageElement>('.card__image', this.container);
-    this.elementButton = this.container as HTMLButtonElement;
+		this.elementCategory = ensureElement('.card__category', this.container);
+		this.elementImage = ensureElement<HTMLImageElement>(
+			'.card__image',
+			this.container
+		);
 
-    this.elementButton.addEventListener('click', () => {
-      if (this.item) {
-        this.events.emit('item:check', this.item);
-      }
-    });
-  }
+		this.container.addEventListener('click', () => {
+			this.events.emit('page-item:open', { id: this.cardId });
+		});
+	}
 
-  set category(value: Category) {
-    this.setText(this.elementCategory, value);
-  }
+	set category(value: Category) {
+		this.setText(this.elementCategory, value);
+	}
 
-  set image(path: string) {
-    this.setImage(this.elementImage, path, this.title);
-  }
-
-  
-
+	set image(value: string) {
+		this.setImage(this.elementImage, value, this.title);
+	}
 }

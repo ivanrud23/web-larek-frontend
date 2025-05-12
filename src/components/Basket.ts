@@ -1,32 +1,44 @@
-import { Category, IItem, Payment, IOrder } from "../types";
+import { Category, IItem, Payment } from '../types';
+import { Model } from './base/Model';
+import { IEvents } from './base/events';
 
-export class Basket {
-  protected items: IItem[]; 
+interface IBasket {
+	items: IItem[];
+}
 
-  constructor () {};
+export class Basket extends Model<IBasket> {
+	protected items: IItem[];
 
-  addItemToBasket(item: IItem) {
-    this.items.push(item);
-  }
+	constructor(protected events: IEvents) {
+		super({}, events);
+		this.items = [];
+	}
 
-  removeItemFromBasket(id: string) {
-    this.items.filter(item => item.id === id);
-  }
+	addItemToBasket(item: IItem) {
+		this.items.push(item);
+	}
 
-  getTotal(): number {
-    return this.items.reduce((a, c) => a + c.price, 0);
-  }
+	removeItemFromBasket(value: IItem) {
+		this.items = this.items.filter((item) => item !== value);
+	}
 
-  clearBasket() {
-    this.items = [];
-  }
+	getTotal(): number {
+		return this.items.reduce((a, c) => a + c.price, 0);
+	}
 
-  getCount(): number {
-    return this.items.length;
-  }
+	clearBasket() {
+		this.items = [];
+	}
 
-  checkItem(item: IItem): boolean {
-    return this.items.includes(item);
-  }
+	getCount(): number {
+		return this.items.length;
+	}
 
+	checkItem(item: IItem): boolean {
+		return this.items.includes(item);
+	}
+
+	getItems(): IItem[] {
+		return this.items;
+	}
 }
