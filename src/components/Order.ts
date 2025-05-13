@@ -12,8 +12,9 @@ export class Order extends Model<IOrder> {
 			address: '',
 			phone: '',
 			email: '',
-			// payment: 'онлайн',
-			// items: []
+			payment: 'онлайн',
+			total: 0,
+			items: []
 		};
 		this.formErrors = {};
 	}
@@ -43,4 +44,29 @@ export class Order extends Model<IOrder> {
 
 		return Object.keys(errors).length === 0;
 	}
+
+	set address(value: string) {
+		this.address = value;
+	}
+
+	set phone(value: string) {
+		this.phone = value;
+	}
+
+	set email(value: string) {
+		this.email = value;
+	}
+
+	set payment(value: Payment) {
+		this.payment = value;
+	}
+
+	set total(value: number) {
+		this.total = value;
+	}
+
+	set items(value: string[]) {
+		this.items = value;
+	}
+
 }

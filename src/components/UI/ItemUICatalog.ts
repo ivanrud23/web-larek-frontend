@@ -1,7 +1,7 @@
 import { ItemUI } from './ItemUI';
-import { ensureElement } from '../utils/utils';
-import { Category, IItem } from '../types';
-import { EventEmitter } from './base/events';
+import { ensureElement } from '../../utils/utils';
+import { Category, IItem } from '../../types';
+import { EventEmitter } from '../base/events';
 
 interface IItemUICatalog {
 	image: string;

@@ -1,6 +1,6 @@
 import { ItemUICatalog } from './ItemUICatalog';
-import { ensureElement } from '../utils/utils';
-import { EventEmitter } from './base/events';
+import { ensureElement } from '../../utils/utils';
+import { EventEmitter } from '../base/events';
 import { ItemUI } from './ItemUI';
 
 interface IItemUIPreview {

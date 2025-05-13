@@ -21,6 +21,7 @@ export type Payment = 'онлайн' | 'при получении';
 export interface IOrederUI {
 	address: string;
 	activeButton: boolean;
+	payment: Payment;
 }
 
 export interface IContactsUI {
@@ -33,4 +34,12 @@ export interface IOrder {
 	address: string;
 	phone: string;
 	email: string;
+	payment: Payment;
+	total: number;
+	items: string[];
+}
+
+export interface IOrderResult {
+	id: string;
+	total: number;
 }

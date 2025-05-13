@@ -1,8 +1,8 @@
-import { IItem } from '../types';
-import { Component } from './base/Component';
-import { EventEmitter } from './base/events';
-import { ensureElement } from '../utils/utils';
-import { ItemUIBasket } from './ItemUIBasket';
+import { IItem } from '../../types';
+import { Component } from '../base/Component';
+import { EventEmitter } from '../base/events';
+import { ensureElement } from '../../utils/utils';
+import { ItemUIBasket } from '../UI/ItemUIBasket';
 
 interface IBasketUI {
 	items: HTMLElement[];

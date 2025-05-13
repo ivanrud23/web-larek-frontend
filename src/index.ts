@@ -2,20 +2,20 @@ import { Items, CatalogChangeEvent } from './components/Items';
 import { AppDataApi } from './components/AppDataApi';
 import './scss/styles.scss';
 import { API_URL, CDN_URL } from './utils/constants';
-import { ItemUIPreview } from './components/ItemUIPreview';
+import { ItemUIPreview } from './components/UI/ItemUIPreview';
 import { cloneTemplate, ensureElement } from './utils/utils';
-import { ItemUICatalog } from './components/ItemUICatalog';
+import { ItemUICatalog } from './components/UI/ItemUICatalog';
 import { EventEmitter } from './components/base/events';
-import { PageUI } from './components/PageUI';
+import { PageUI } from './components/UI/PageUI';
 import { Basket } from './components/Basket';
 import { IItem, IOrder, IOrederUI } from './types';
 import { Modal } from './components/common/Modal';
-import { BasketUI } from './components/BasketUI';
-import { OrderUI } from './components/OredrUI';
-import { ContactsUI } from './components/ContactsUI';
-import { ItemUIBasket } from './components/ItemUIBasket';
+import { BasketUI } from './components/UI/BasketUI';
+import { OrderUI } from './components/UI/OredrUI';
+import { ContactsUI } from './components/UI/ContactsUI';
+import { ItemUIBasket } from './components/UI/ItemUIBasket';
 import { Order } from './components/Order';
-import { SuccessUI } from './components/SuccessUI';
+import { SuccessUI } from './components/UI/SuccessUI';
 
 // Все шаблоны
 const itemCatalogTemplate = document.querySelector(
@@ -105,9 +105,10 @@ events.on('formErrors:change', (errors: Partial<IOrder>) => {
 		activeButton: Boolean(address),
 		errors: '',
 	});
+	orderContacts.errors = Object.values({phone, email}).filter(i => !!i).join('; ')
 	orderContacts.render({
 		activeButton: Boolean(true),
-		errors: '',
+		errors: orderContacts.errors
 	});
 });
 
@@ -158,6 +159,8 @@ events.on('success:open', () => {
 
 // открыть модалку успешного заказа
 events.on('success:open', () => {
+	
+	api.postOrder(order)
 	success.total = basket.getTotal();
 	basket.clearBasket();
 	page.counter = 0;
