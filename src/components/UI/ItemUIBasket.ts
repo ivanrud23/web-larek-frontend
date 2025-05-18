@@ -1,4 +1,3 @@
-
 import { ensureElement } from '../../utils/utils';
 import { EventEmitter } from '../base/events';
 import { ItemUI } from './ItemUI';
@@ -21,7 +20,7 @@ export class ItemUIBasket extends ItemUI<IItemUIBasket> {
 		this.elementIndex = ensureElement('.basket__item-index', this.container);
 
 		this.elementButton.addEventListener('click', () => {
-			this.events.emit('basket:changed', { id: this.cardId });
+			this.events.emit('item:removeFromBasket', { id: this.cardId });
 		});
 	}
 

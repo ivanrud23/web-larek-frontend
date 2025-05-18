@@ -16,18 +16,16 @@ export interface IItem {
 
 export type FormErrors = Partial<Record<keyof IOrder, string>>;
 
-export type Payment = 'онлайн' | 'при получении';
+export type Payment = 'card' | 'cash' | '';
 
 export interface IOrederUI {
 	address: string;
-	activeButton: boolean;
 	payment: Payment;
 }
 
 export interface IContactsUI {
 	phone: string;
 	email: string;
-	activeButton: boolean;
 }
 
 export interface IOrder {
@@ -35,9 +33,12 @@ export interface IOrder {
 	phone: string;
 	email: string;
 	payment: Payment;
+}
+
+export type IApiOrder = IOrder & {
 	total: number;
 	items: string[];
-}
+};
 
 export interface IOrderResult {
 	id: string;

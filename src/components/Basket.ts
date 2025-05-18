@@ -16,10 +16,12 @@ export class Basket extends Model<IBasket> {
 
 	addItemToBasket(item: IItem) {
 		this.items.push(item);
+		this.events.emit('basket:changed');
 	}
 
 	removeItemFromBasket(value: IItem) {
 		this.items = this.items.filter((item) => item !== value);
+		this.events.emit('basket:changed');
 	}
 
 	getTotal(): number {
@@ -28,6 +30,7 @@ export class Basket extends Model<IBasket> {
 
 	clearBasket() {
 		this.items = [];
+		this.events.emit('basket:changed');
 	}
 
 	getCount(): number {
@@ -40,5 +43,9 @@ export class Basket extends Model<IBasket> {
 
 	getItems(): IItem[] {
 		return this.items;
+	}
+
+	getItemsId(): string[] {
+		return this.items.map((item) => item.id);
 	}
 }

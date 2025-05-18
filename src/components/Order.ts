@@ -12,21 +12,18 @@ export class Order extends Model<IOrder> {
 			address: '',
 			phone: '',
 			email: '',
-			payment: 'онлайн',
-			total: 0,
-			items: []
+			payment: '',
 		};
 		this.formErrors = {};
 	}
 
 	setOrderField<T extends keyof IOrder>(field: T, value: IOrder[T]) {
 		this.order[field] = value;
-		// this.emitChanges('order:changed', { field });
-		this.validateOrder();
+		this.emitChanges('order:changed', { field });
 	}
 
 	validateOrder() {
-		const errors: typeof this.formErrors = {};
+		const errors: FormErrors = {};
 		if (!this.order.email) {
 			errors.email = 'Необходимо указать email';
 		}
@@ -36,37 +33,13 @@ export class Order extends Model<IOrder> {
 		if (!this.order.address) {
 			errors.address = 'Необходимо указать адрес';
 		}
-		// if (!this.order.payment) {
-		//   errors.payment = 'Необходимо выбрать способ оплаты';
-		// }
-		this.formErrors = errors;
-		this.events.emit('formErrors:change', this.formErrors);
-
-		return Object.keys(errors).length === 0;
+		if (this.order.payment === '') {
+			errors.payment = 'Необходимо выбрать способ оплаты';
+		}
+		return errors;
 	}
 
-	set address(value: string) {
-		this.address = value;
+	getOrder() {
+		return this.order;
 	}
-
-	set phone(value: string) {
-		this.phone = value;
-	}
-
-	set email(value: string) {
-		this.email = value;
-	}
-
-	set payment(value: Payment) {
-		this.payment = value;
-	}
-
-	set total(value: number) {
-		this.total = value;
-	}
-
-	set items(value: string[]) {
-		this.items = value;
-	}
-
 }

@@ -4,11 +4,11 @@ import { Component } from '../base/Component';
 import { EventEmitter } from '../base/events';
 
 interface IFormState {
-	// valid: boolean;
+	valid: boolean;
 	errors: string;
 }
 
-export class FormUI<T> extends Component<IFormState> {
+export class FormUI<T> extends Component<IFormState & T> {
 	protected elementSubmit: HTMLButtonElement;
 	protected elementErrors: HTMLElement;
 
@@ -35,7 +35,7 @@ export class FormUI<T> extends Component<IFormState> {
 	}
 
 	protected onInputChange(field: keyof T, value: string) {
-		this.events.emit(`${this.container.name}.${String(field)}:change`, {
+		this.events.emit(`order.${String(field)}:change`, {
 			field,
 			value,
 		});
@@ -49,14 +49,8 @@ export class FormUI<T> extends Component<IFormState> {
 		this.setText(this.elementErrors, value);
 	}
 
-	render(state?: Partial<T> & IFormState) {
-		if (!state) return this.container;
-		
-		const { errors, ...inputs} = state;
-		super.render({ errors});
-		Object.assign(this, inputs);
-		return this.container;
-
+	render(state?: Partial<T & IFormState>) {
+		return super.render(state);
 }
 	
 }

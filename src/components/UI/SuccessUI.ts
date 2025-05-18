@@ -1,8 +1,6 @@
-
 import { ensureElement } from '../../utils/utils';
 import { Component } from '../base/Component';
 import { EventEmitter } from '../base/events';
-
 
 interface ISuccess {
 	total: number;

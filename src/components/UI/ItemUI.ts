@@ -1,4 +1,3 @@
-
 import { ensureElement } from '../../utils/utils';
 import { Component } from '../base/Component';
 import { EventEmitter } from '../base/events';
@@ -24,8 +23,12 @@ export abstract class ItemUI<T> extends Component<IItemUI & T> {
 		this.setText(this.itemTitle, value);
 	}
 
-	set price(value: number) {
-		this.setText(this.itemPrice, value);
+	set price(value: number | null) {
+		if (value === null) {
+			this.setText(this.itemPrice, 'Бесценно');
+		} else {
+			this.setText(this.itemPrice, value + ' синапсов');
+		}
 	}
 
 	set id(value: string) {

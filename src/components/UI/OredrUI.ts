@@ -1,33 +1,30 @@
 import { IOrederUI, Payment } from '../../types';
-import { ensureElement } from '../../utils/utils';
+import { ensureAllElements, ensureElement } from '../../utils/utils';
 import { EventEmitter } from '../base/events';
 import { FormUI } from '../common/FormUI';
 
 export class OrderUI extends FormUI<IOrederUI> {
 	protected elementAddress: HTMLElement;
 	protected orderPayment: Payment;
-	protected elementPaymentButton: HTMLElement;
+	protected elementPaymentButtons: HTMLElement[];
 
 	constructor(container: HTMLFormElement, events: EventEmitter) {
 		super(container, events);
 
-		this.elementPaymentButton = ensureElement(
+		this.elementPaymentButtons = ensureAllElements(
 			'.button_alt',
 			this.container
-		) as HTMLButtonElement;
+		) as HTMLElement[];
 		this.elementAddress = ensureElement('.form__input', this.container);
 
 		this.elementSubmit.addEventListener('click', () => {
 			this.events.emit('basket-contacts:open');
 		});
 
-		this.elementPaymentButton.addEventListener('click', () => {
-			this.events.emit('payment:select');
-			
-		});
-
-		this.elementAddress.addEventListener('input', () => {
-			this.events.emit('address:changed');
+		this.elementPaymentButtons.forEach((button) => {
+			button.addEventListener('click', () => {
+				this.onInputChange('payment', button.getAttribute('name' as Payment));
+			});
 		});
 	}
 
@@ -36,9 +33,13 @@ export class OrderUI extends FormUI<IOrederUI> {
 			value;
 	}
 
-	
-
-	set activeButton(value: boolean) {
-		this.setDisabled(this.elementSubmit, value);
+	set payment(value: Payment) {
+		this.elementPaymentButtons.forEach((button) => {
+			this.toggleClass(
+				button,
+				'button_alt-active',
+				button.getAttribute('name') === value
+			);
+		});
 	}
 }

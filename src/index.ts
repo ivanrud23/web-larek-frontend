@@ -62,29 +62,16 @@ events.on('itemsCatalog:changed', () => {
 	});
 });
 
-//Изменения корзины
-events.on('basket:changed', (data: { id: string }) => {
+// Добавить товар в корзину
+events.on('item:addToBasket', (data: { id: string }) => {
 	const item = catalog.getItem(data.id);
-	if (!basket.checkItem(item)) {
-		basket.addItemToBasket(item);
-	} else {
-		basket.removeItemFromBasket(item);
-	}
-	const items = basket.getItems().map((item, index) => {
-		const itemUI = new ItemUIBasket(cloneTemplate(itemBasketTemplate), events);
-		itemUI.index = index + 1;
-		return itemUI.render(item);
-	});
-	const total = basket.getTotal();
-	page.counter = basket.getCount();
-	basketUI.render({
-		items: items,
-		total: total,
-		addToOrder: Boolean(!total),
-	});
-	card.render({
-		addToBasket: basket.getItems().some((i) => i.id === item.id),
-	});
+	basket.addItemToBasket(item);
+});
+
+// Удалить товар из корзины
+events.on('item:removeFromBasket', (data: { id: string }) => {
+	const item = catalog.getItem(data.id);
+	basket.removeItemFromBasket(item);
 });
 
 // Открыть карточку товара по клику
@@ -93,23 +80,39 @@ events.on('page-item:open', (data: { id: string }) => {
 	modal.render({
 		content: card.render({
 			...item,
-			addToBasket: basket.getItems().some((i) => i.id === item.id),
+			addToBasket:
+				basket.getItems().some((i) => i.id === item.id) || !item.price,
 		}),
 	});
 });
 
-events.on('formErrors:change', (errors: Partial<IOrder>) => {
-	const { address, phone, email } = errors;
-	const activeButtonContacts = phone && email;
-	orderAddress.render({
-		activeButton: Boolean(address),
-		errors: '',
-	});
-	orderContacts.errors = Object.values({phone, email}).filter(i => !!i).join('; ')
-	orderContacts.render({
-		activeButton: Boolean(true),
-		errors: orderContacts.errors
-	});
+// Оформление заказа, заполнение форм
+events.on('order:changed', (data: { field: keyof IOrder }) => {
+	if (data.field === 'address' || data.field === 'payment') {
+		const errors = order.validateOrder();
+		const { address, payment } = errors;
+		const isValid = !(address || payment);
+		orderAddress.render({
+			address: order.getOrder().address,
+			payment: order.getOrder().payment,
+			valid: isValid,
+			errors: Object.values({ payment, address })
+				.filter((i) => !!i)
+				.join('; '),
+		});
+	} else {
+		const errors = order.validateOrder();
+		const { email, phone } = errors;
+		const isValid = !(email || phone);
+		orderContacts.render({
+			email: order.getOrder().email,
+			phone: order.getOrder().phone,
+			valid: isValid,
+			errors: Object.values({ email, phone })
+				.filter((i) => !!i)
+				.join('; '),
+		});
+	}
 });
 
 // Изменилось одно из полей
@@ -121,18 +124,23 @@ events.on(
 );
 
 // Открыть корзину по клику
-events.on('page-basket:select', () => {
+events.on('basket:changed', () => {
+	page.render({ counter: basket.getCount() });
 	const items = basket.getItems().map((item, index) => {
 		const itemUI = new ItemUIBasket(cloneTemplate(itemBasketTemplate), events);
 		itemUI.index = index + 1;
 		return itemUI.render(item);
 	});
 	const total = basket.getTotal();
+	content: basketUI.render({
+		items: items,
+		total: total,
+	});
+});
+
+events.on('page-basket:select', () => {
 	modal.render({
-		content: basketUI.render({
-			items: items,
-			total: total,
-		}),
+		content: basketUI.render(),
 	});
 });
 
@@ -151,26 +159,26 @@ events.on('basket-contacts:open', () => {
 });
 
 // открыть модалку контактов
-events.on('success:open', () => {
+events.on('order:submit', () => {
 	modal.render({
 		content: orderContacts.render(),
 	});
 });
 
 // открыть модалку успешного заказа
-events.on('success:open', () => {
-	
-	api.postOrder(order)
-	success.total = basket.getTotal();
-	basket.clearBasket();
-	page.counter = 0;
-
-	modal.render({
-		content: success.render(),
-	});
-	basketUI.render({
-		addToOrder: true,
-	});
+events.on('contacts:submit', () => {
+	const oredrData = {
+		...order.getOrder(),
+		total: basket.getTotal(),
+		items: basket.getItemsId(),
+	};
+	api.postOrder(oredrData).then((data) => {
+		success.total = data.total;
+		modal.render({
+			content: success.render(),
+		});
+		basket.clearBasket();
+	}).catch;
 });
 
 events.on('success:close', () => {

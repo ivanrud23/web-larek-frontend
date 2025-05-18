@@ -1,7 +1,7 @@
 import { IItem } from '../../types';
 import { Component } from '../base/Component';
 import { EventEmitter } from '../base/events';
-import { ensureElement } from '../../utils/utils';
+import { createElement, ensureElement } from '../../utils/utils';
 import { ItemUIBasket } from '../UI/ItemUIBasket';
 
 interface IBasketUI {
@@ -18,6 +18,12 @@ export class BasketUI extends Component<IBasketUI> {
 	constructor(container: HTMLElement, protected events: EventEmitter) {
 		super(container);
 		this.elementItemsList = ensureElement('.basket__list', this.container);
+		this.elementItemsList.replaceChildren(
+			createElement('p', {
+				className: 'basket_empty',
+				textContent: 'Корзина пуста',
+			})
+		);
 		this.elementTotal = ensureElement('.basket__price', this.container);
 		this.elementSubmit = ensureElement(
 			'.basket__button',
@@ -32,14 +38,24 @@ export class BasketUI extends Component<IBasketUI> {
 	}
 
 	set items(value: HTMLElement[]) {
-		this.elementItemsList.replaceChildren(...value);
+		if (value.length === 0) {
+			this.elementItemsList.replaceChildren(
+				createElement('p', {
+					className: 'basket_empty',
+					textContent: 'Корзина пуста',
+				})
+			);
+		} else {
+			this.elementItemsList.replaceChildren(...value);
+		}
 	}
 
-	set total(value: HTMLElement) {
+	set total(value: number) {
 		this.setText(this.elementTotal, value);
-	}
-
-	set addToOrder(value: boolean) {
-		this.setDisabled(this.elementSubmit, value);
+		if (value > 0) {
+			this.setDisabled(this.elementSubmit, false);
+		} else {
+			this.setDisabled(this.elementSubmit, true);
+		}
 	}
 }

@@ -27,6 +27,31 @@ export class ItemUICatalog<IItemUICatalog> extends ItemUI<IItemUICatalog> {
 
 	set category(value: Category) {
 		this.setText(this.elementCategory, value);
+		this.toggleClass(
+			this.elementCategory,
+			'card__category_soft',
+			value === 'софт-скил'
+		);
+		this.toggleClass(
+			this.elementCategory,
+			'card__category_hard',
+			value === 'хард-скил'
+		);
+		this.toggleClass(
+			this.elementCategory,
+			'card__category_other',
+			value === 'другое'
+		);
+		this.toggleClass(
+			this.elementCategory,
+			'card__category_additional',
+			value === 'дополнительное'
+		);
+		this.toggleClass(
+			this.elementCategory,
+			'card__category_button',
+			value === 'кнопка'
+		);
 	}
 
 	set image(value: string) {

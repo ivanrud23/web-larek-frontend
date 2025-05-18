@@ -18,7 +18,7 @@ export class ItemUIPreview extends ItemUICatalog<IItemUIPreview> {
 		this.elemntButon = ensureElement('.card__button', this.container);
 
 		this.elemntButon.addEventListener('click', () => {
-			this.events.emit('basket:changed', { id: this.cardId });
+			this.events.emit('item:addToBasket', { id: this.cardId });
 		});
 	}
 
