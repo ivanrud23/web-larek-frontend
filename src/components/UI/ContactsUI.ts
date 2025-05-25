@@ -2,9 +2,9 @@ import { IContactsUI, Payment } from '../../types';
 import { ensureElement } from '../../utils/utils';
 import { Component } from '../base/Component';
 import { EventEmitter } from '../base/events';
-import { FormUI } from '../common/FormUI';
+import { Form } from '../common/Form';
 
-export class ContactsUI extends FormUI<IContactsUI> {
+export class ContactsUI extends Form<IContactsUI> {
 	protected emailInput: HTMLInputElement;
 	protected phoneInput: HTMLInputElement;
 

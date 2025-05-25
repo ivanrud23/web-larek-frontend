@@ -14,11 +14,11 @@ export interface IItem {
 	image: string;
 }
 
-export type FormErrors = Partial<Record<keyof IOrder, string>>;
+export type FormErrors = Partial<Record<keyof IUserData, string>>;
 
 export type Payment = 'card' | 'cash' | '';
 
-export interface IOrederUI {
+export interface IPaymentUI {
 	address: string;
 	payment: Payment;
 }
@@ -28,19 +28,19 @@ export interface IContactsUI {
 	email: string;
 }
 
-export interface IOrder {
+export interface IUserData {
 	address: string;
 	phone: string;
 	email: string;
 	payment: Payment;
 }
 
-export type IApiOrder = IOrder & {
+export type IApiOrder = IUserData & {
 	total: number;
 	items: string[];
 };
 
-export interface IOrderResult {
+export interface IOrder {
 	id: string;
 	total: number;
 }

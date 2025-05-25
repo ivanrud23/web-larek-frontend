@@ -1,9 +1,9 @@
-import { IOrederUI, Payment } from '../../types';
+import { IPaymentUI, Payment } from '../../types';
 import { ensureAllElements, ensureElement } from '../../utils/utils';
 import { EventEmitter } from '../base/events';
-import { FormUI } from '../common/FormUI';
+import { Form } from '../common/Form';
 
-export class OrderUI extends FormUI<IOrederUI> {
+export class PaymentUI extends Form<IPaymentUI> {
 	protected elementAddress: HTMLElement;
 	protected orderPayment: Payment;
 	protected elementPaymentButtons: HTMLElement[];

@@ -6,7 +6,7 @@ export type CatalogChangeEvent = {
 	catalog: IItem[];
 };
 
-export class Items extends Model<IItem> {
+export class Item extends Model<IItem> {
 	protected items: IItem[] = [];
 	preview: string | null;
 
@@ -17,11 +17,6 @@ export class Items extends Model<IItem> {
 	setItems(items: IItem[]) {
 		this.items.push(...items);
 		this.events.emit('itemsCatalog:changed');
-	}
-
-	setPreview(item: IItem) {
-		this.preview = item.id;
-		this.emitChanges('preview:changed', item);
 	}
 
 	addItem(item: IItem) {

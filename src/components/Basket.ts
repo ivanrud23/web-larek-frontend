@@ -37,10 +37,6 @@ export class Basket extends Model<IBasket> {
 		return this.items.length;
 	}
 
-	checkItem(item: IItem): boolean {
-		return this.items.includes(item);
-	}
-
 	getItems(): IItem[] {
 		return this.items;
 	}

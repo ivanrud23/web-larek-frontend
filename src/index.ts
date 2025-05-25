@@ -1,4 +1,4 @@
-import { Items, CatalogChangeEvent } from './components/Items';
+import { Item, CatalogChangeEvent } from './components/Items';
 import { AppDataApi } from './components/AppDataApi';
 import './scss/styles.scss';
 import { API_URL, CDN_URL } from './utils/constants';
@@ -8,13 +8,13 @@ import { ItemUICatalog } from './components/UI/ItemUICatalog';
 import { EventEmitter } from './components/base/events';
 import { PageUI } from './components/UI/PageUI';
 import { Basket } from './components/Basket';
-import { IItem, IOrder, IOrederUI } from './types';
+import { IItem, IUserData, IPaymentUI } from './types';
 import { Modal } from './components/common/Modal';
 import { BasketUI } from './components/UI/BasketUI';
-import { OrderUI } from './components/UI/OredrUI';
+import { PaymentUI } from './components/UI/PaymentUI';
 import { ContactsUI } from './components/UI/ContactsUI';
 import { ItemUIBasket } from './components/UI/ItemUIBasket';
-import { Order } from './components/Order';
+import { UserData } from './components/UserData';
 import { SuccessUI } from './components/UI/SuccessUI';
 
 // Все шаблоны
@@ -37,13 +37,13 @@ const successTemplate = document.querySelector(
 ) as HTMLTemplateElement;
 
 const events = new EventEmitter();
-const catalog = new Items(events);
+const catalog = new Item(events);
 const basket = new Basket(events);
-const order = new Order(events);
+const userData = new UserData(events);
 const api = new AppDataApi(CDN_URL, API_URL);
 const card = new ItemUIPreview(cloneTemplate(itemTemplate), events);
 const basketUI = new BasketUI(cloneTemplate(basketTemplate), events);
-const orderAddress = new OrderUI(cloneTemplate(orderTemplate), events);
+const orderAddress = new PaymentUI(cloneTemplate(orderTemplate), events);
 const orderContacts = new ContactsUI(cloneTemplate(contactsTemplate), events);
 const success = new SuccessUI(cloneTemplate(successTemplate), events);
 
@@ -87,26 +87,26 @@ events.on('page-item:open', (data: { id: string }) => {
 });
 
 // Оформление заказа, заполнение форм
-events.on('order:changed', (data: { field: keyof IOrder }) => {
+events.on('order:changed', (data: { field: keyof IUserData }) => {
 	if (data.field === 'address' || data.field === 'payment') {
-		const errors = order.validateOrder();
+		const errors = userData.validateUserData();
 		const { address, payment } = errors;
 		const isValid = !(address || payment);
 		orderAddress.render({
-			address: order.getOrder().address,
-			payment: order.getOrder().payment,
+			address: userData.getUserData().address,
+			payment: userData.getUserData().payment,
 			valid: isValid,
 			errors: Object.values({ payment, address })
 				.filter((i) => !!i)
 				.join('; '),
 		});
 	} else {
-		const errors = order.validateOrder();
+		const errors = userData.validateUserData();
 		const { email, phone } = errors;
 		const isValid = !(email || phone);
 		orderContacts.render({
-			email: order.getOrder().email,
-			phone: order.getOrder().phone,
+			email: userData.getUserData().email,
+			phone: userData.getUserData().phone,
 			valid: isValid,
 			errors: Object.values({ email, phone })
 				.filter((i) => !!i)
@@ -118,8 +118,8 @@ events.on('order:changed', (data: { field: keyof IOrder }) => {
 // Изменилось одно из полей
 events.on(
 	/^order\..*:change/,
-	(data: { field: keyof IOrder; value: string }) => {
-		order.setOrderField(data.field, data.value);
+	(data: { field: keyof IUserData; value: string }) => {
+		userData.setDataField(data.field, data.value);
 	}
 );
 
@@ -144,7 +144,7 @@ events.on('page-basket:select', () => {
 	});
 });
 
-// открыть модалку оформления заказа
+// открыть модалку выбор оплаты
 events.on('basket-order:open', () => {
 	modal.render({
 		content: orderAddress.render(),
@@ -158,17 +158,11 @@ events.on('basket-contacts:open', () => {
 	});
 });
 
-// открыть модалку контактов
-events.on('order:submit', () => {
-	modal.render({
-		content: orderContacts.render(),
-	});
-});
 
 // открыть модалку успешного заказа
 events.on('contacts:submit', () => {
 	const oredrData = {
-		...order.getOrder(),
+		...userData.getUserData(),
 		total: basket.getTotal(),
 		items: basket.getItemsId(),
 	};
