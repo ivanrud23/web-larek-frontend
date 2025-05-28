@@ -51,7 +51,7 @@ export class BasketUI extends Component<IBasketUI> {
 	}
 
 	set total(value: number) {
-		this.setText(this.elementTotal, value);
+		this.setText(this.elementTotal, value + ' синапсов');
 		if (value > 0) {
 			this.setDisabled(this.elementSubmit, false);
 		} else {

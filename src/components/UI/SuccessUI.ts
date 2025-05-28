@@ -24,6 +24,6 @@ export class SuccessUI extends Component<ISuccess> {
 	}
 
 	set total(value: number) {
-		this.setText(this.elementTotal, value);
+		this.setText(this.elementTotal, value + ' синапсов');
 	}
 }

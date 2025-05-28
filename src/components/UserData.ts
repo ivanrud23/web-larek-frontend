@@ -4,7 +4,6 @@ import { Model } from './base/Model';
 
 export class UserData extends Model<IUserData> {
 	protected userData: IUserData;
-	protected formErrors: FormErrors;
 
 	constructor(protected events: IEvents) {
 		super({}, events);
@@ -14,7 +13,6 @@ export class UserData extends Model<IUserData> {
 			email: '',
 			payment: '',
 		};
-		this.formErrors = {};
 	}
 
 	setDataField<T extends keyof IUserData>(field: T, value: IUserData[T]) {
